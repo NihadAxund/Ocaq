@@ -8,11 +8,11 @@ import { ThemeProvider } from '@/components/providers/theme-provider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'DermaBeauty - Premium Skincare, Hair Care & Wellness Products',
+  title: 'RECIN - Premium Skincare, Hair Care & Wellness Products',
   description: 'Discover premium skincare, hair care, supplements, and medical aesthetic services. Trusted by professionals worldwide with clinically proven results.',
   keywords: 'skincare, hair care, beauty products, supplements, medical aesthetics, professional beauty',
   openGraph: {
-    title: 'DermaBeauty - Premium Beauty & Wellness',
+    title: 'RECIN - Premium Beauty & Wellness',
     description: 'Transform your beauty routine with our clinically proven products and professional services.',
     images: ['/og-image.jpg'],
   },

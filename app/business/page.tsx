@@ -81,7 +81,7 @@ export default function BusinessPage() {
                 {t.nav.business}
               </Badge>
               <h1 className="text-4xl md:text-5xl font-bold mb-6 gradient-text">
-                Become a DermaBeauty Distributor
+                Become a RECIN Distributor
               </h1>
               <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
                 Join our global network of successful distributors and build a profitable business 

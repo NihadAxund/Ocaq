@@ -44,7 +44,7 @@ export function Header() {
             >
               <Heart className="w-5 h-5 text-white" />
             </motion.div>
-            <span className="text-xl font-bold gradient-text">DermaBeauty</span>
+            <span className="text-xl font-bold gradient-text">RECIN</span>
           </Link>
 
           {/* Desktop Navigation */}

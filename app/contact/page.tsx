@@ -153,7 +153,7 @@ export default function ContactPage() {
                   <Mail className="w-5 h-5 text-primary mr-3" />
                   <div>
                     <p className="font-medium">Email</p>
-                    <p className="text-muted-foreground">info@dermabeauty.com</p>
+                    <p className="text-muted-foreground">info@RECIN.com</p>
                   </div>
                 </div>
                 <div className="flex items-center">
