@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useStore } from '@/lib/store';
@@ -16,64 +16,68 @@ type ThemeProviderState = {
   setTheme: (theme: Theme) => void;
 };
 
-const initialState: ThemeProviderState = {
+const ThemeProviderContext = createContext<ThemeProviderState>({
   theme: 'system',
-  setTheme: () => null,
-};
-
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
+  setTheme: () => {},
+});
 
 export function ThemeProvider({
   children,
   defaultTheme = 'system',
   storageKey = 'dermabeauty-theme',
-  ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage?.getItem(storageKey) as Theme) || defaultTheme
-  );
+  // 1) Başlangıçta sadece defaultTheme kullanıyoruz
+  const [theme, setTheme] = useState<Theme>(defaultTheme);
   const { setTheme: setStoreTheme } = useStore();
 
+  // 2) İlk mount olduğunda localStorage’dan oku
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const stored = localStorage.getItem(storageKey) as Theme | null;
+    if (stored) {
+      setTheme(stored);
+    }
+  }, [storageKey]);
+
+  // 3) Tema değiştikçe <html> sınıfını güncelle ve store’a yaz
   useEffect(() => {
     const root = window.document.documentElement;
-
     root.classList.remove('light', 'dark');
 
+    let applied: 'light' | 'dark';
     if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
-        .matches
+      applied = window.matchMedia('(prefers-color-scheme: dark)').matches
         ? 'dark'
         : 'light';
-
-      root.classList.add(systemTheme);
-      setStoreTheme(systemTheme);
-      return;
+    } else {
+      applied = theme;
     }
 
-    root.classList.add(theme);
-    setStoreTheme(theme);
+    root.classList.add(applied);
+    setStoreTheme(applied);
   }, [theme, setStoreTheme]);
 
-  const value = {
-    theme,
-    setTheme: (theme: Theme) => {
-      localStorage?.setItem(storageKey, theme);
-      setTheme(theme);
-    },
+  // 4) localStorage’a yazmayı da bu fonksiyonda yapıyoruz
+  const handleSetTheme = (newTheme: Theme) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(storageKey, newTheme);
+    }
+    setTheme(newTheme);
   };
 
   return (
-    <ThemeProviderContext.Provider {...props} value={value}>
+    <ThemeProviderContext.Provider
+      value={{ theme, setTheme: handleSetTheme }}
+    >
       {children}
     </ThemeProviderContext.Provider>
   );
 }
 
 export const useTheme = () => {
-  const context = useContext(ThemeProviderContext);
-
-  if (context === undefined)
+  const ctx = useContext(ThemeProviderContext);
+  if (!ctx) {
     throw new Error('useTheme must be used within a ThemeProvider');
-
-  return context;
+  }
+  return ctx;
 };
